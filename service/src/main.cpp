@@ -1,15 +1,23 @@
 #include "boundaryRecognition.h"
 
-int main(int argc, char** argv) {
-  cv::String key = "{imagePath | none | input image}";
-  cv::CommandLineParser parser(argc, argv, key);
+int main() {
+  httplib::Server srvr;
 
-  std::string imagePath = parser.get<std::string>("imagePath");
+  srvr.Post("/process", [](const httplib::Request& req, httplib::Response& res) {
+    std::vector<char> buffer(req.body.begin(), req.body.end());
+    Mat input = cv::imdecode(Mat(buffer), cv::IMREAD_GRAYSCALE);
 
-  if (imagePath != "none") {
-    BoundaryRecognition singleRecognition(imagePath);
-    Mat singleImageBoundaries = singleRecognition.getBoundaries();
-  } 
+    BoundaryRecognition br(input);
+    Mat output = br.getBoundaries();
 
+    vector<uchar> buf;
+    cv::imencode(".jpg", output, buf);
+
+    std::string encodedImage(buf.begin(), buf.end());
+
+    res.set_content(encodedImage, "image/jpg");
+  });
+
+  srvr.listen("0.0.0.0", 8080);
   return 0;
 }

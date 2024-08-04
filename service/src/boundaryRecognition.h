@@ -5,6 +5,8 @@
 #include <fstream>
 #include "../include/json.hpp"
 #include <string>
+#include "../include/httplib.h"
+#include <vector>
 
 using cv::Mat;
 using cv::imread;
@@ -12,24 +14,22 @@ using cv::imshow;
 using cv::imwrite;
 using cv::waitKey;
 using std::cout;
+using std::vector;
 
 /**
  * @brief Класс, содержащий основной и промежуточные методы обработки изображения для получения границ.
  */
 class BoundaryRecognition {
 public:
-  //! Путь обрабатываемого изображения.
-  const std::string& imagePath; 
-
-  //! Индекс обрабатываемого изображения для случая, когда обрабатывается несколько изображений.
-  size_t indexOfProcessibleImage;
+  //! Оригинальное изображение.
+  const Mat originalImage; 
 
   /**
    * @brief Конструктор, инициализирующий объект класса.
    * 
-   * @param imagePath Путь обрабатываемого изображения.
+   * @param originalImage Оригинальное изображение.
    */
-  BoundaryRecognition(const std::string& imagePath);
+  BoundaryRecognition(const Mat& originalImage);
 
   /**
    * @brief Объединяющий все этапы обработки метод.
@@ -39,9 +39,6 @@ public:
   Mat getBoundaries();
 
 private:
-  //! Необработанное изображение.
-  Mat originalImage; 
-
    //! Обрабатываемое изображение, с которым будут производиться операции.
   Mat processingImage;
 
