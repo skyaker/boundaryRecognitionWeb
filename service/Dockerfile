@@ -1,5 +1,6 @@
-# Stage 1: Build stage
-FROM ubuntu:20.04 as builder
+FROM gcc:11
+
+WORKDIR /app
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -11,28 +12,16 @@ RUN apt-get update && \
   libopencv-dev \
   && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-
 COPY src/ /app/src
 COPY include/ /app/include
 COPY CMakeLists.txt /app
 
-RUN mkdir build && cd build && cmake .. && make
+RUN mkdir build && cd build \
+cmake .. \
+make
 
-# Stage 2: Run stage
-FROM ubuntu:20.04
+RUN chmod +x /app/build/BRCli
 
-ENV DEBIAN_FRONTEND=noninteractive
+EXPOSE 8080
 
-RUN apt-get update && \
-  apt-get install -y \
-  libopencv-dev \
-  && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-
-COPY --from=builder /app/bin/BRCli /app/bin/BRCli
-
-RUN chmod +x /app/bin/BRCli
-
-CMD ["./bin/BRCli"]
+CMD ["/app/bin/BRCli"]
