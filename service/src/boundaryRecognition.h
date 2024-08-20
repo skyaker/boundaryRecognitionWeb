@@ -6,7 +6,6 @@
 #include "../include/json.hpp"
 #include <string>
 #include "../include/httplib.h"
-#include <vector>
 
 using cv::Mat;
 using cv::imread;

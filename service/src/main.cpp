@@ -2,6 +2,7 @@
 
 int main() {
   httplib::Server srvr;
+  srvr.listen("0.0.0.0", 8080);
 
   srvr.Post("/process", [](const httplib::Request& req, httplib::Response& res) {
     std::vector<char> buffer(req.body.begin(), req.body.end());
@@ -15,9 +16,9 @@ int main() {
 
     std::string encodedImage(buf.begin(), buf.end());
 
-    res.set_content(encodedImage, "image/jpg");
+    res.set_content(encodedImage, "image.jpg");
   });
 
-  srvr.listen("0.0.0.0", 8080);
+  
   return 0;
 }

@@ -1,6 +1,4 @@
-FROM gcc:11
-
-WORKDIR /app
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -12,16 +10,19 @@ RUN apt-get update && \
   libopencv-dev \
   && rm -rf /var/lib/apt/lists/*
 
-COPY src/ /app/src
-COPY include/ /app/include
-COPY CMakeLists.txt /app
+COPY . /app
 
-RUN mkdir build && cd build \
-cmake .. \
-make
+WORKDIR /app
 
-RUN chmod +x /app/build/BRCli
+RUN mkdir build && cd build && \
+    cmake .. && \
+    make && \
+    mv BRCli ..
 
 EXPOSE 8080
 
-CMD ["/app/bin/BRCli"]
+WORKDIR /app
+
+RUN chmod +x BRCli
+
+CMD ["./BRCli"]
