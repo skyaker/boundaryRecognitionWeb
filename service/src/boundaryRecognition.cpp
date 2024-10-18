@@ -144,11 +144,22 @@ void BoundaryRecognition::applyDoubleThreshold() {
   }
 }
 
+// --------------------------------------------------------------------------------
+void logcpp(const std::string& message) {
+  auto now = std::chrono::system_clock::now();
+  std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+  std::cout << "[" << std::ctime(&now_time) << "] " << message << std::endl;
+}
+// --------------------------------------------------------------------------------
+
 cv::Mat BoundaryRecognition::getBoundaries() {
   // if (originalImage.depth() != CV_32F) {
   //   originalImage.convertTo(originalImage, CV_32F);
   // }
 
+  // ---------------
+  logcpp("Check2");
+  // ---------------
   cv::normalize(originalImage, originalImage, 0, 255, cv::NORM_MINMAX);
   originalImage.convertTo(originalImage, CV_8U);
 

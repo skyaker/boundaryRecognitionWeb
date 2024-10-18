@@ -3,9 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <fstream>
-#include "../include/json.hpp"
 #include <string>
-#include "../include/httplib.h"
 
 using cv::Mat;
 using cv::imread;
@@ -72,11 +70,6 @@ private:
    */
   void applyDoubleThreshold();
 
-  /**
-   * @brief Проверка корректности полученных границ по метрике F1.
-   */
-  void checkQuality();
-
   //! Доля правильных положительных предсказаний среди всех предсказанных положительных случаев.
   std::vector<double> precisionVec;
 
@@ -85,9 +78,6 @@ private:
 
   //! Значение точности по F1-метрике.
   std::vector<double> f1scoreVec; 
-
-  //! Сохранение результата в формате json-файла.
-  void writeResultsToJson();
 };
 
 #endif

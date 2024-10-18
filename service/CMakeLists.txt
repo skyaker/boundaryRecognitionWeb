@@ -9,12 +9,16 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/bin.rel)
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_SOURCE_DIR}/bin.relwithdbg)
 
+set(Boost_USE_STATIC_LIBS ON)
+
 find_package(OpenCV CONFIG REQUIRED)
 find_package(Threads REQUIRED)
+find_package(Boost COMPONENTS program_options REQUIRED)
 
 add_library(openCVlibs INTERFACE)
 include_directories(src)
 include_directories(include)
+include_directories(${Boost_INCUDE_DIR})
 
 function(libraries_add_tag openCVlibs)
 target_link_libraries(openCVlibs INTERFACE ${ARGN})
@@ -31,5 +35,5 @@ libraries_add_tag(openCVlibs opencv_core
     opencv_flann
 )
 
-add_executable(BRCli src/main.cpp src/boundaryRecognition.h src/boundaryRecognition.cpp)
-target_link_libraries(BRCli PRIVATE openCVlibs)
+add_executable(BRCli src/main.cpp src/boundaryRecognition.cpp src/server.cpp include/boundaryRecognition.h include/server.h)
+target_link_libraries(BRCli PRIVATE openCVlibs ${Boost_LIBRARIES})
